@@ -6,8 +6,13 @@ using System.Threading.Tasks;
 
 namespace POO_Project_team8
 {
-    class Login
+    class Grade
     {
-        //public static SortedList<User.Username, User> UserList;
+        public int note { get; set; }
+        public EnumDesMatieres matieres { get; set; }
+
+        //public EnumDesProfs profs { get; set; }
+
+
     }
 }

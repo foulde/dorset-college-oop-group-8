@@ -6,8 +6,13 @@ using System.Threading.Tasks;
 
 namespace POO_Project_team8
 {
-    class Login
+    public enum EnumDesMatieres
     {
-        //public static SortedList<User.Username, User> UserList;
+        FluidMechanics,
+        Algebra,
+        POOAlgorithm,
+        DataStructure,
+        Statistics
+
     }
 }

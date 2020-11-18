@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 
 namespace POO_Project_team8
 {
-    class Login
+    interface ITimeTable
     {
-        //public static SortedList<User.Username, User> UserList;
+        int WeekNumber { get; set; }
+
+        void displayTheCourse();
+
+
     }
 }
