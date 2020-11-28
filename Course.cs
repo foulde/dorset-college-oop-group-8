@@ -83,7 +83,7 @@ namespace POO_Project
             set { courseTeacher = value; }
         }
 
-        public string ToString()
+        public string ToStringTimetable()
         {
             return "The course " + courseName + " is taking place every " + CourseDay + " between " + startingHour + " and " + endingHour + " and your teacher is " + courseTeacher.Name();
         }
