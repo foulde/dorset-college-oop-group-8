@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
@@ -22,19 +22,19 @@ namespace OOPtimetable
             bool success=false;
             switch (course.CourseDay)       //according to the day
             {
-                case "Monday":
+                case "monday":
                     success = AddCourseToDay(course,MondayList);
                     break;
-                case "Tuesday":
+                case "tuesday":
                     success = AddCourseToDay(course, TuesdayList);
                     break;
-                case "Wednesday":
+                case "wednesday":
                     success = AddCourseToDay(course, WednesdayList);
                     break;
-                case "Thursday":
+                case "thursday":
                     success = AddCourseToDay(course, ThursdayList);
                     break;
-                case "Friday":
+                case "friday":
                     success = AddCourseToDay(course, FridayList);
                     break;
                 default:
@@ -89,19 +89,19 @@ namespace OOPtimetable
             bool success = false;
             switch (course.CourseDay)
             {
-                case "Monday":
+                case "monday":
                     success = RemoveCourseToDay(course.StartingHour, MondayList);
                     break;
-                case "Tuesday":
+                case "tuesday":
                     success = RemoveCourseToDay(course.StartingHour, TuesdayList);
                     break;
-                case "Wednesday":
+                case "wednesday":
                     success = RemoveCourseToDay(course.StartingHour, WednesdayList);
                     break;
-                case "Thursday":
+                case "thursday":
                     success = RemoveCourseToDay(course.StartingHour, ThursdayList);
                     break;
-                case "Friday":
+                case "friday":
                     success = RemoveCourseToDay(course.StartingHour, FridayList);
                     break;
                 default:
@@ -116,19 +116,19 @@ namespace OOPtimetable
             bool success = false;
             switch (dayName)
             {
-                case "Monday":
+                case "monday":
                     success = RemoveCourseToDay(hourKey, MondayList);
                     break;
-                case "Tuesday":
+                case "tuesday":
                     success = RemoveCourseToDay(hourKey, TuesdayList);
                     break;
-                case "Wednesday":
+                case "wednesday":
                     success = RemoveCourseToDay(hourKey, WednesdayList);
                     break;
-                case "Thursday":
+                case "thursday":
                     success = RemoveCourseToDay(hourKey, ThursdayList);
                     break;
-                case "Friday":
+                case "friday":
                     success = RemoveCourseToDay(hourKey, FridayList);
                     break;
                 default:
