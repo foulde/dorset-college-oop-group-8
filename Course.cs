@@ -23,19 +23,19 @@ namespace POO_Project
             this.courseTeacher = CourseTeacher;
             if (StartingHour.Length == 4)
             {
-                this.startingHour = StartingHour;
+                this.startingHour = "0" + StartingHour;
             }
             else
             {
-                this.startingHour = '0' + StartingHour;
+                this.startingHour = StartingHour;
             }
             if (EndingHour.Length == 4)
             {
-                this.endingHour = EndingHour;
+                this.endingHour = "0" + EndingHour;
             }
             else
             {
-                this.endingHour = '0' + EndingHour;
+                this.endingHour = EndingHour;
             }
         }
 
@@ -56,9 +56,9 @@ namespace POO_Project
             set 
             {
                 if (value.Length == 4)
-                    startingHour = value;
+                    startingHour = "0" + value;
                 else
-                    startingHour = '0' + value;
+                    startingHour = value;
             }
         }
         public string EndingHour
@@ -67,9 +67,9 @@ namespace POO_Project
             set
             {
                 if (value.Length == 4)
-                    endingHour = value;
+                    endingHour = "0" + value;
                 else
-                    endingHour = '0' + value;
+                    endingHour = value;
             }
         }
         public string Content
