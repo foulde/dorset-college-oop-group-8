@@ -4,56 +4,42 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace POO_Project
+namespace POO_Projet
 {
     class User
     {
         public string Username { get; set; }
         public string UserPassword { get; set; }
-        public string UserType { get; set; }
+        public string name { get; set; }
+        public int age { get; set; }
+        public string status { get; set; }
+        public int ID { get; set; }
 
-        public SortedList<string, User> FacultyUsers;
-        public SortedList<string, User> Administrators;
-        public SortedList<string, User> Students;
-        public SortedList<string, User> Users;
-        public bool Login1(SortedList<string, User> Students, SortedList<string, User> Administrators, SortedList<string, User> FacultyUsers, string username, string password, string usertype)
+        public User(string Username, string UserPassword, string name, int age, string status, int ID)
         {
-            bool login = false;
-            if(usertype=="Faculty")
-            {
-                if (FacultyUsers.ContainsKey(username) != true) { }
-
-                else if(password==FacultyUsers[FacultyUsers.GetIndexOfKey(username)].UserPassword)
-                {   login = true;   }
-            }
-
-            else if (usertype == "Administrator")
-            {
-                if (Administrators.ContainsKey(username) != true) { }
-
-                else if (password == Administrators[Administrators.GetIndexOfKey(username)].UserPassword)
-                { login = true; }
-            }
-
-            else if (usertype == "Student")
-            {
-                if (Students.ContainsKey(username) != true) { }
-
-                else if (password == Students[Students.GetIndexOfKey(username)].UserPassword)
-                { login = true; }
-            }
-
-            return login;
+            this.Username = Username;
+            this.UserPassword = UserPassword;
+            this.name = name;
+            this.age = age;
+            this.status = status;
+            this.ID = ID;
         }
 
-        public bool Login2(SortedList<string, User> Users, string username, string password)
+        public List<User> Users;
+
+        static public bool Login(List<User> UsersList, string username)
         {
+            
             bool login = false;
-            if (Users.ContainsKey(username) != true) { }
-
-            else if (password == Students[Users.GetIndexOfKey(username)].UserPassword)
-            { login = true; }
-
+            foreach (User user in UsersList)
+            {
+                if (user.Username == username) 
+                {
+                    Console.Write("Enter password => ");
+                    string password = Console.ReadLine();
+                    if (password == user.UserPassword) { login = true; break; }
+                }
+            }
             return login;
         }
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace POO_Project_team8
+namespace POO_Projet
 {
     public enum UserTypes
     {
@@ -13,3 +13,4 @@ namespace POO_Project_team8
         Student
     }
 }
+

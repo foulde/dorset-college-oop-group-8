@@ -5,19 +5,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace projet_poo_faculty_admin
+namespace POO_Projet
 {
-    class Faculty
+    class Faculty:User
     {
-        private string name;
-        private string email;
-        private string adress;
-        public Faculty(string name,string email,string adress)
+        public string adress { get; set; }
+        public List<Course> coursesTaught { get; set; }
+
+        public Faculty(string Username, string UserPassword, string name, int age, string status, int ID)
+            : base (Username, UserPassword, name, age, status, ID)
         {
-            this.name = name;
-            this.email = email;
-            this.adress = adress;
+            
+            StreamReader LectCourse = new StreamReader("Courses.csv");
+            while (LectCourse.Peek() > 0)
+            {
+                string[] datas = LectCourse.ReadLine().Split(';');
+                if (Username == datas[2])
+                {
+                    coursesTaught.Add(new Course(datas[0], datas[1], datas[2], datas[3], datas[4], datas[5], datas[6]));
+                }
+            }
+            LectCourse.Close();
+            
         }
+        
         public void Show_Grade(string GradeName)
         {
             StreamReader LectGrade = new StreamReader("Grades.csv");
@@ -32,7 +43,7 @@ namespace projet_poo_faculty_admin
             int placeNote = 0;
             bool verif = false;
             datas = LectGrade.ReadLine().Split(';');
-            for(int i = 0; i < datas.Length; i++)
+            for (int i = 0; i < datas.Length; i++)
             {
                 if (datas[i] == GradeName)
                 {
@@ -148,7 +159,7 @@ namespace projet_poo_faculty_admin
                 for (int j = 0; j < datas2.Length; j++)
                 {
                     datas[i][j] = datas2[j];
-                } 
+                }
                 i++;
             }
             LectureGrade.Close();
