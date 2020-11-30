@@ -49,6 +49,7 @@ namespace POO_Projet
             while (infinite)
             {
                 #region LOGIN
+                Console.Clear();
                 Console.Write("Enter username => ");
                 string username = Console.ReadLine();
                 while (User.Login(userList, username) == false)
