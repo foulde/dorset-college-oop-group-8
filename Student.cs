@@ -18,7 +18,8 @@ namespace POO_Projet
         public Student(string Username, string UserPassword, string name, int age, string status, int ID)
             :base(Username, UserPassword, name, age, status, ID)
         {
-            StreamReader LectStudents = new StreamReader("Students.csv");
+            StreamReader LectStudents = new StreamReader("STUDENT_DATABASE.csv");
+            LectStudents.ReadLine();
             while (LectStudents.Peek() > 0)
             {
                 string[] datas = LectStudents.ReadLine().Split(';');
@@ -49,14 +50,14 @@ namespace POO_Projet
             SortedList<string, Course> ThursdayList = new SortedList<string, Course>();
             SortedList<string, Course> FridayList = new SortedList<string, Course>();
 
-            StreamReader LectCourse = new StreamReader("Courses.csv");
+            StreamReader LectCourse = new StreamReader("COURSE_DATABASE.csv");
 
             while (LectCourse.Peek() > 0)
             {
                 bool success = false;
                 string[] datas = LectCourse.ReadLine().Split(';');
                 Course course = new Course(datas[0], datas[1], datas[2], datas[3], datas[4], datas[5], datas[6]);
-                if (classroom == course.CourseName)
+                if (classroom == course.classroom)
                 {
                     switch (course.CourseDay)       //according to the day
                     {
@@ -77,6 +78,7 @@ namespace POO_Projet
                             break;
                         default:
                             success = false;
+                            Console.WriteLine(course.CourseDay + " " + course.classroom);
                             Console.WriteLine("Wrong day input");       //if the input is neither of the 5 days, the program returns false.
                             break;
                     }
@@ -148,6 +150,29 @@ namespace POO_Projet
         {
             return (string.Compare(end1, start2) <= 0);
         }
-
+        public void CheckGrades()
+        {
+            StreamReader LectGrade = new StreamReader("GRADES_DATABASE.csv");
+            string[] nameGrade = LectGrade.ReadLine().Split(';');
+            while (LectGrade.Peek() > 0)
+            {
+                string[] datas = LectGrade.ReadLine().Split(';');
+                if (datas[0] == Username)
+                {
+                    for(int i = 1; i < datas.Length; i++)
+                    {
+                        Console.WriteLine(nameGrade[i] + " " + datas[i]);
+                    }
+                }
+            }
+        }
+        public void AddCourseMissing(string course)
+        {
+            studentMissing.Add(course);
+        }
+        public void DeleteCourseMissing(string course)
+        {
+            studentMissing.Remove(course);
+        }
     }
 }

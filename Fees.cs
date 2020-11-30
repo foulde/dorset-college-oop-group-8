@@ -52,10 +52,9 @@ namespace POO_Projet
             }
         }
 
-        public string FeesInfo()
+        public void FeesInfo()
         {
-            string Result = "There is still " + paymentDue + " to pay.";
-            return Result;
+            Console.WriteLine("There is still " + paymentDue + " to pay.");
         }
 
         public bool MakePayment(double ValuePayment)

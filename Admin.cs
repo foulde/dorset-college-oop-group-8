@@ -103,7 +103,7 @@ namespace POO_Projet
             List<Course> ListCourses = new List<Course>();
             Timetable bidule = new Timetable();
         }
-        public void Create_Course()
+        public Course Create_Course()
         {
             Console.Write("choose the name of the course =>");
             string courseName = Console.ReadLine();
@@ -119,7 +119,7 @@ namespace POO_Projet
             string courseEndingHours = Console.ReadLine();
             Console.Write("choose the classroom =>");
             string courseclassroom = Console.ReadLine();
-            Course newCourse = new Course(courseName, courseContent, courseFaculty, courseDay, courseStartingHour, courseEndingHours, courseclassroom);
+            return new Course(courseName, courseContent, courseFaculty, courseDay, courseStartingHour, courseEndingHours, courseclassroom);
         }
 
     }

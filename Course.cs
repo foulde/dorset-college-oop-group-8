@@ -14,7 +14,7 @@ namespace POO_Projet
         private string courseDay;
         private string startingHour;
         private string endingHour;
-        private string classroom;
+        public string classroom { get; set; }
 
         public Course(string CourseName, string Content, string CourseTeacher, string CourseDay, string StartingHour, string EndingHour,string Classroom)
         {
