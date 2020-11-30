@@ -64,6 +64,7 @@ namespace POO_Projet
             if (ValuePayment <= accountBalance && ValuePayment <= paymentDue)
             {
                 paymentDue = paymentDue - ValuePayment;
+                accountBalance = accountBalance - ValuePayment;
                 Result = true;
             }
             return Result;
