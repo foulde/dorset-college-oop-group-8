@@ -4,18 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace projet_poo_faculty_admin
+namespace Final_Project_POO
 {
-    
-    class Admin
+    class Admin : User
     {
-        private string name;
-        private string email;
-        public Admin(string email, string name)
-        {
-            this.name = name;
-            this.email = email;
-        }
+        public Admin(string Username, string UserPassword, string name, int age, string status, int ID)
+            : base(Username, UserPassword, name, age, status, ID) { }
+
+        /*
         public void Modify_Timetable(Timetable timetable)
         {
             int a = 0;
@@ -30,7 +26,12 @@ namespace projet_poo_faculty_admin
                         Console.WriteLine("Which course would you want to add?");
                         string courseAddName = Console.ReadLine();
                         //trouver le cours avec ce nom en fonction de ou ils sont stockés;
-                        Course course = new Course();
+                        Course course;
+                        StreamReader LectCourse = new StreamReader("Courses.csv");
+                        while (LectCourse.Peek() > 0)
+                        {
+                            LectCourse.ReadLine();
+                        }
                         timetable.AddCourse(course);
                         break;
                     case 2:
@@ -49,7 +50,7 @@ namespace projet_poo_faculty_admin
                 }
                 Console.Clear();
             }
-        }
+        }*/
         public void Modify_Courses(Course course)
         {
             int a = 0;
@@ -62,25 +63,25 @@ namespace projet_poo_faculty_admin
                 {
                     case 1:
                         Console.Write("Choose the new name =>");
-                        course.courseName = name = Console.ReadLine();
+                        course.CourseName = Console.ReadLine();
                         break;
                     case 2:
                         break;
                     case 3:
                         Console.Write("Choose the new content =>");
-                        course.content = name = Console.ReadLine();
+                        course.Content = name = Console.ReadLine();
                         break;
                     case 4:
                         Console.Write("Choose the new day =>");
-                        course.courseDay = name = Console.ReadLine();
+                        course.CourseDay = name = Console.ReadLine();
                         break;
                     case 5:
                         Console.Write("Choose the new starting hour =>");
-                        course.startingHour = name = Console.ReadLine();
+                        course.StartingHour = name = Console.ReadLine();
                         break;
                     case 6:
                         Console.Write("Choose the new ending hour =>");
-                        course.endingHour = name = Console.ReadLine();
+                        course.EndingHour = name = Console.ReadLine();
                         break;
                     case 7:
                         a = 1;
@@ -92,19 +93,12 @@ namespace projet_poo_faculty_admin
                 Console.Clear();
             }
         }
-        public void Create_Timetable()//creer un timetable vide
-        {
-            Console.Write("choisir un TD =>");
-            //tableau de TD on choisit le td puis on crée l'emplois du temps dedans
-            List<Course> ListCourses = new List<Course>();
-            Timetable bidule = new Timetable();
-        }
-        public void Create_Course()
+        public Course Create_Course()
         {
             Console.Write("choose the name of the course =>");
             string courseName = Console.ReadLine();
             Console.Write("choose the Faculty =>");
-            //Faculty courseFaculty = Console.ReadLine();
+            string courseFaculty = Console.ReadLine();
             Console.Write("choose the content =>");
             string courseContent = Console.ReadLine();
             Console.Write("choose the day =>");
@@ -113,9 +107,10 @@ namespace projet_poo_faculty_admin
             string courseStartingHour = Console.ReadLine();
             Console.Write("choose the ending hour =>");
             string courseEndingHours = Console.ReadLine();
-            Course newCourse = new Course();
+            Console.Write("choose the classroom =>");
+            string courseclassroom = Console.ReadLine();
+            return new Course(courseName, courseContent, courseFaculty, courseDay, courseStartingHour, courseEndingHours, courseclassroom);
         }
 
     }
-    
 }
