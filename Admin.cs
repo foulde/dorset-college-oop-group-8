@@ -11,46 +11,6 @@ namespace Final_Project_POO
         public Admin(string Username, string UserPassword, string name, int age, string status, int ID)
             : base(Username, UserPassword, name, age, status, ID) { }
 
-        /*
-        public void Modify_Timetable(Timetable timetable)
-        {
-            int a = 0;
-            while (a == 0)
-            {
-                Console.WriteLine("What change would you want to do? \r\n 1)Add course \r\n 2)Remove course \r\n 3)Back");
-                int choose = Convert.ToInt32(Console.ReadLine());
-                Console.Clear();
-                switch (choose)
-                {
-                    case 1:
-                        Console.WriteLine("Which course would you want to add?");
-                        string courseAddName = Console.ReadLine();
-                        //trouver le cours avec ce nom en fonction de ou ils sont stockés;
-                        Course course;
-                        StreamReader LectCourse = new StreamReader("Courses.csv");
-                        while (LectCourse.Peek() > 0)
-                        {
-                            LectCourse.ReadLine();
-                        }
-                        timetable.AddCourse(course);
-                        break;
-                    case 2:
-                        Console.WriteLine("Which course would you want to remove?");
-                        string courseRemoveName = Console.ReadLine();
-                        //trouver le cours avec ce nom en fonction de ou ils sont stockés;
-                        Course courseRemove = new Course();
-                        timetable.RemoveCourse(courseRemove);
-                        break;
-                    case 3:
-                        a = 1;
-                        break;
-                    default:
-                        Console.WriteLine("Wrong Input");
-                        break;
-                }
-                Console.Clear();
-            }
-        }*/
         public void Modify_Courses(Course course)
         {
             int a = 0;

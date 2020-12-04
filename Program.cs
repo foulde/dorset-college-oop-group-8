@@ -214,6 +214,7 @@ namespace Final_Project_POO
                                         Console.WriteLine("1)Show grades");
                                         Console.WriteLine("2)Create grades");
                                         Console.WriteLine("3)Modify a grade");
+                                        //delete grade
                                         Console.WriteLine("4)Back");
                                         choose = Console.ReadLine();
                                         switch (choose)
@@ -349,28 +350,58 @@ namespace Final_Project_POO
                                         Console.Clear();
                                         Console.WriteLine("1)Create course");
                                         Console.WriteLine("2)Modify course");
+                                        //delete a course
                                         Console.WriteLine("3)Back");
                                         choose = Console.ReadLine();
                                         switch (choose)
                                         {
                                             case "1":
-                                                Course course = ListAdmins[index].Create_Course();
+                                                Course newCourse = ListAdmins[index].Create_Course();
                                                 foreach (Faculty faculty in ListFaculties)
                                                 {
-                                                    if (course.CourseTeacher == faculty.name)
+                                                    if (newCourse.CourseTeacher == faculty.name)
                                                     {
-                                                        faculty.coursesTaught.Add(course);
+                                                        faculty.coursesTaught.Add(newCourse);
                                                         break;
                                                     }
                                                 }
                                                 break;
                                             case "2":
-                                                //prendre en compte le fait qu'il peut changer le prof de la matiere et donc de liste
+                                                Console.Clear();
+                                                Console.WriteLine("Which course =>");
+                                                string courseName = Console.ReadLine();
+                                                foreach(Faculty faculty in ListFaculties)
+                                                {
+                                                    int indexCourse = 0;
+                                                    foreach (Course course in faculty.coursesTaught)
+                                                    {
+                                                        if (courseName == course.CourseName)
+                                                        {
+                                                            Course changeFaculty = faculty.ModifyCourse(indexCourse);
+                                                            if (changeFaculty != null)
+                                                            {
+                                                                foreach (Faculty faculty2 in ListFaculties)
+                                                                {
+                                                                    if(changeFaculty.CourseTeacher == faculty2.name)
+                                                                    {
+                                                                        faculty2.coursesTaught.Add(changeFaculty);
+                                                                        faculty.coursesTaught.Remove(changeFaculty);
+                                                                        break;
+                                                                    }
+                                                                }
+                                                            }
+                                                            break;
+                                                        }
+                                                        index++;
+                                                    }
+                                                }
                                                 break;
                                             case "3":
                                                 ExitCourse = true;
                                                 break;
                                             default:
+                                                Console.WriteLine("Wrong value");
+                                                Console.ReadKey();
                                                 break;
                                         }
                                     }
@@ -395,6 +426,7 @@ namespace Final_Project_POO
                                         Console.WriteLine("1)Add student");
                                         Console.WriteLine("2)Add faculty");
                                         Console.WriteLine("3)Add Admin");
+                                        //delete user
                                         Console.WriteLine("4)Back");
                                         choose = Console.ReadLine();
                                         string newUsername;
@@ -417,6 +449,7 @@ namespace Final_Project_POO
                                                 Console.Write("new ID");//ne doit pas etre le meme qu'un autre
                                                 newID = Convert.ToInt32(Console.ReadLine());
                                                 ListStudents.Add(new Student(newUsername, newPassword, newName, newAge, "STUDENT", newID));
+                                                //le rajouter dans les note
                                                 break;
                                             case "2":
                                                 Console.Clear();
@@ -448,6 +481,10 @@ namespace Final_Project_POO
                                                 break;
                                             case "4":
                                                 ExitUser = true;
+                                                break;
+                                            default:
+                                                Console.WriteLine("Wrong value");
+                                                Console.ReadKey();
                                                 break;
                                         }
                                     }
@@ -502,6 +539,8 @@ namespace Final_Project_POO
                                                 ExitFees = true;
                                                 break;
                                             default:
+                                                Console.WriteLine("Wrong value");
+                                                Console.ReadKey();
                                                 break;
                                         }
                                     }

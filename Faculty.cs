@@ -280,5 +280,63 @@ namespace Final_Project_POO
         {
             return (string.Compare(end1, start2) <= 0);
         }
+        public Course ModifyCourse(int index)
+        {
+            Course changeFaculty = null;
+            bool ExitCourse = false;
+            while (!ExitCourse)
+            {
+                Console.Clear();
+                Console.WriteLine("1)Change course name");
+                Console.WriteLine("2)Change content");
+                Console.WriteLine("3)Change faculty");
+                Console.WriteLine("4)Change day");
+                Console.WriteLine("5)Change starting hour");
+                Console.WriteLine("6)Change ending hour");
+                Console.WriteLine("7)Change classroom");
+                Console.WriteLine("8)Back");
+                switch (Console.ReadLine())
+                {
+                    case "1":
+                        Console.Write("New course name =>");
+                        coursesTaught[index].CourseName = Console.ReadLine();
+                        break;
+                    case "2":
+                        Console.Write("New content =>");
+                        coursesTaught[index].Content = Console.ReadLine();
+                        break;
+                    case "3":
+                        Console.Write("New faculty =>");
+                        coursesTaught[index].CourseTeacher = Console.ReadLine();
+                        changeFaculty = coursesTaught[index];
+                        break;
+                    case "4":
+                        Console.Write("New day =>");
+                        coursesTaught[index].CourseDay = Console.ReadLine();//verifier
+                        break;
+                    case "5":
+                        Console.Write("New starting hour =>");
+                        coursesTaught[index].StartingHour = Console.ReadLine();//verifier
+                        break;
+                    case "6":
+                        Console.Write("New ending hour =>");
+                        coursesTaught[index].EndingHour = Console.ReadLine();//verifier
+                        break;
+                    case "7":
+                        Console.Write("New classroom =>");
+                        coursesTaught[index].classroom = Console.ReadLine();//verifer
+                        break;
+                    case "8":
+                        ExitCourse = true;
+                        break;
+                    default:
+                        Console.WriteLine("Wrong value");
+                        Console.ReadKey();
+                        break;
+                }
+
+            }
+            return changeFaculty;
+        }
     }
 }
