@@ -13,7 +13,7 @@ namespace Final_Project_POO
         private DateTime limitDate;
         private bool paymentStatus;
 
-        public Fees(double AccountBalance, bool PaymentStatus = false, double PaymentDue = 8000)
+        public Fees(double AccountBalance, bool PaymentStatus, double PaymentDue)
         {
             this.limitDate = new DateTime(2021, 6, 4);//voir si changement
             this.accountBalance = AccountBalance;
@@ -42,6 +42,7 @@ namespace Final_Project_POO
 
         public void PaymentDelay()
         {
+            Console.Clear();
             if (DateTime.Compare(limitDate, DateTime.Today) < 0)
             {
                 Console.WriteLine("Reminder : you have to pay your university fees, you are late for payment. You still have " + paymentDue + " to pay.");
@@ -50,11 +51,14 @@ namespace Final_Project_POO
             {
                 Console.WriteLine("You have until " + limitDate.ToString() + " to pay.");
             }
+            Console.ReadKey();
         }
 
         public void FeesInfo()
         {
+            Console.Clear();
             Console.WriteLine("There is still " + paymentDue + " to pay.");
+            Console.ReadKey();
         }
 
         public bool MakePayment(double ValuePayment)

@@ -23,7 +23,7 @@ namespace Final_Project_POO
             this.courseDay = CourseDay.ToLower();
             this.courseTeacher = CourseTeacher;
             this.classroom = Classroom;
-            if (StartingHour.Length == 4)
+            if (StartingHour.Length == 4)//we check that the time is correctly input
             {
                 this.startingHour = "0" + StartingHour;
             }

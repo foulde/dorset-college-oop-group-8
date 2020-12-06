@@ -12,54 +12,10 @@ namespace Final_Project_POO
     {
         static void Main(string[] args)
         {
-            #region ESPACE DETENTE
-            /*
-            int noteDo = 262;
-            int noteRe = 294;
-            int noteRe2 = 587;
-            int noteMi = 330;
-            int noteFa = 349;
-            int noteFa2 = 698;
-            int noteSol = 392;
-            int noteLa = 440;
-            int noteSi = 494;
-            int noir = 400;
-            int blanche = 800;
-            int croche = 200;
-            int doubleCroche = 100;
-            //OBJECTION
-            Console.Beep(noteRe, croche);
-            Console.Beep(noteSol, croche);
-            Console.Beep(noteRe2, croche);
-            Console.Beep(noteRe, croche);
-            Console.Beep(noteSol, croche);
-            Console.Beep(noteRe2, croche);
-            Console.Beep(noteRe, croche);
-            Console.Beep(noteSol, croche);
-            Console.Beep(noteRe2, croche);
-            Thread.Sleep(croche + noir + blanche);
-            Console.Beep(noteRe, croche);
-            Console.Beep(noteSol, croche);
-            Console.Beep(noteRe2, croche);
-            Console.Beep(noteRe, croche);
-            Console.Beep(noteSol, croche);
-            Console.Beep(noteRe2, croche);
-            Console.Beep(noteRe, croche);
-            Console.Beep(noteSol, croche);
-            Console.Beep(noteRe2, croche);
-            Console.Beep(noteRe, croche);
-            Console.Beep(noteSol, croche);
-            Console.Beep(noteRe2, croche);
-            Console.Beep(noteRe, croche);
-            Console.Beep(noteSol, croche);
-            Console.Beep(noteFa2, croche);
-            */
-            #endregion
-
+            //first we will read the database
             #region LECTURE DATABASE
             StreamReader LectureDataBase = new StreamReader("USERS_DATABASE.csv");
-
-            List<User> userList = new List<User>();
+            List<User> userList = new List<User>();//all the users go to a list of user
             string[] datas;
             LectureDataBase.ReadLine();
             while (LectureDataBase.Peek() > 0)
@@ -68,7 +24,7 @@ namespace Final_Project_POO
                 userList.Add(new User(datas[0], datas[1], datas[2], Convert.ToInt32(datas[3]), datas[4], Convert.ToInt32(datas[5])));
             }
             LectureDataBase.Close();
-
+            //then we separate the users if they are admin, student or faculty
             List<Admin> ListAdmins = new List<Admin>();
             List<Student> ListStudents = new List<Student>();
             List<Faculty> ListFaculties = new List<Faculty>();
@@ -97,7 +53,7 @@ namespace Final_Project_POO
                 Console.Clear();
                 Console.Write("Enter username => ");
                 string username = Console.ReadLine();
-                while (User.Login(userList, username) == false)
+                while (!User.Login(userList, username))//verify if the user can log in
                 {
                     Console.WriteLine("Username or password is wrong");
                     Console.ReadKey();
@@ -109,35 +65,37 @@ namespace Final_Project_POO
                 int indexUser = 0;
                 foreach (User user in userList)
                 {
-                    if (user.Username == username)
+                    if (user.Username == username)//we search the index of the user in the userlist
                     {
                         indexUser = userList.IndexOf(user);
                         break;
                     }
                 }
                 string choose;
-
                 bool LogOut = false;
                 while (!LogOut)
                 {
-                    int index;
+                    int index = 0;
                     switch (userList[indexUser].status)
                     {
-                        case "STUDENT":
+                        case "STUDENT"://if the user is a student
                             #region STUDENT
-                            index = 0;
-                            foreach (User student in ListStudents)
+                            foreach (Student student in ListStudents)//we search the index of the student in the student list
                             {
-                                if (student.Username == username) break;
-                                index++;
+                                if (student.Username == username) 
+                                { 
+                                    index = ListStudents.IndexOf(student);
+                                    break; 
+                                }
                             }
                             Console.Clear();
                             Console.WriteLine("1)Check grades");
                             Console.WriteLine("2)Check Timetable");
-                            Console.WriteLine("3)Fees information");
+                            Console.WriteLine("3)Fees");
                             Console.WriteLine("4)Check attendance");
                             Console.WriteLine("5)Modify password");
                             Console.WriteLine("6)Log out");
+                            Console.WriteLine("DO NOT FORGET TO LOG OUT TO SAVE THE DATAS");
                             choose = Console.ReadLine();
                             switch (choose)
                             {
@@ -153,6 +111,34 @@ namespace Final_Project_POO
                                     break;
                                 case "3":
                                     Console.Clear();
+                                    Console.WriteLine("1)Make payment");
+                                    Console.WriteLine("2)Check fees details");
+                                    Console.WriteLine("3)Check payment delay");
+                                    Console.WriteLine("4)Back");
+                                    choose = Console.ReadLine();
+                                    switch (choose)
+                                    {
+                                        case "1":
+                                            break;
+                                        case "2":
+                                            ListStudents[index].feesDetails.FeesInfo();
+                                            break;
+                                        case "3":
+                                            ListStudents[index].feesDetails.PaymentDelay();
+                                            break;
+                                        case "4":
+                                            Console.Clear();
+                                            double payment;
+                                            do Console.Write("How many do you want to pay => ");
+                                            while (!double.TryParse(Console.ReadLine(), out payment));
+                                            if (ListStudents[index].feesDetails.MakePayment(payment)) Console.WriteLine("The payment has been made");
+                                            else Console.WriteLine("There was an error during the payment");
+                                            Console.ReadKey();
+                                            break;
+                                        default:
+                                            break;
+                                    }
+
                                     ListStudents[index].feesDetails.FeesInfo();
                                     Console.ReadKey();
                                     break;
@@ -171,13 +157,17 @@ namespace Final_Project_POO
                                     break;
                                 case "5":
                                     Console.Clear();
-                                    Console.WriteLine("Current password");
+                                    Console.Write("Current password => ");
                                     if (Console.ReadLine() == ListStudents[index].UserPassword)
                                     {
-                                        Console.WriteLine("New password");
+                                        Console.Write("New password =>");
                                         ListStudents[index].UserPassword = Console.ReadLine();
                                     }
-                                    else Console.WriteLine("Wrong password");
+                                    else
+                                    {
+                                        Console.WriteLine("Wrong password");
+                                        Console.ReadKey();
+                                    }
                                     break;
                                 case "6":
                                     LogOut = true;
@@ -191,11 +181,13 @@ namespace Final_Project_POO
                         #endregion
                         case "FACULTY":
                             #region FACULTY
-                            index = 0;
-                            foreach (User faculty in ListFaculties)
+                            foreach (Faculty faculty in ListFaculties)//we search the index of the faculty in the faculty list
                             {
-                                if (faculty.Username == username) break;
-                                index++;
+                                if (faculty.Username == username)
+                                {
+                                    index = ListFaculties.IndexOf(faculty);
+                                    break;
+                                }
                             }
                             Console.Clear();
                             Console.WriteLine("1)Manage grades");
@@ -203,6 +195,7 @@ namespace Final_Project_POO
                             Console.WriteLine("3)Change password");
                             Console.WriteLine("4)Check Timetable");
                             Console.WriteLine("5)Log out");
+                            Console.WriteLine("DO NOT FORGET TO LOG OUT TO SAVE THE DATAS");
                             choose = Console.ReadLine();
                             switch (choose)
                             {
@@ -214,37 +207,46 @@ namespace Final_Project_POO
                                         Console.WriteLine("1)Show grades");
                                         Console.WriteLine("2)Create grades");
                                         Console.WriteLine("3)Modify a grade");
-                                        //delete grade
-                                        Console.WriteLine("4)Back");
+                                        Console.WriteLine("4)Delete grades");
+                                        Console.WriteLine("5)Back");
                                         choose = Console.ReadLine();
                                         switch (choose)
                                         {
                                             case "1":
                                                 Console.Clear();
-                                                Console.WriteLine("What grade? => ");
-                                                ListFaculties[index].Show_Grade(Console.ReadLine());
+                                                Console.Write("What grade? => ");
+                                                ListFaculties[index].ShowGrade(Console.ReadLine());
                                                 Console.ReadKey();
                                                 break;
                                             case "2":
                                                 Console.Clear();
-                                                Console.WriteLine("What is the name of the grade? => ");
-                                                ListFaculties[index].Create_Grade(Console.ReadLine());
+                                                Console.Write("What is the name of the grade? => ");
+                                                string gradeName = Console.ReadLine();
+                                                Console.Write("Which classroom => ");
+                                                ListFaculties[index].CreateGrade(gradeName, Console.ReadLine());
                                                 break;
                                             case "3":
                                                 Console.Clear();
-                                                Console.WriteLine("What grade would you want to modify? => ");
+                                                Console.Write("What grade would you want to modify? => ");
                                                 string nameGrade = Console.ReadLine();
-                                                Console.WriteLine("Which student =>");
+                                                Console.Write("Which student => ");
                                                 string student = Console.ReadLine();
-                                                Console.WriteLine("Value of the grade =>");
-                                                string grade = Console.ReadLine();
-                                                ListFaculties[index].Change_Grade(student, nameGrade, grade);
+                                                int grade;
+                                                do Console.Write("Value of the grade => ");
+                                                while (!int.TryParse(Console.ReadLine(), out grade));
+                                                ListFaculties[index].ChangeGrade(student, nameGrade, Convert.ToString(grade));
                                                 break;
                                             case "4":
+                                                Console.Clear();
+                                                Console.Write("What grade would you want to delete => ");
+                                                ListFaculties[index].DeleteGrade(Console.ReadLine());
+                                                break;
+                                            case "5":
                                                 ExitGrade = true;
                                                 break;
                                             default:
                                                 Console.WriteLine("Wrong Value");
+                                                Console.ReadKey();
                                                 break;
                                         }
                                     }
@@ -262,9 +264,9 @@ namespace Final_Project_POO
                                         {
                                             case "1":
                                                 Console.Clear();
-                                                Console.Write("Which student (mail) =>");
+                                                Console.Write("Which student (mail) => ");
                                                 string studentMailAdd = Console.ReadLine();
-                                                Console.Write("Which course =>");
+                                                Console.Write("Which course => ");
                                                 string courseNameAdd = Console.ReadLine();
                                                 foreach (Student student in ListStudents)
                                                 {
@@ -277,9 +279,9 @@ namespace Final_Project_POO
                                                 break;
                                             case "2":
                                                 Console.Clear();
-                                                Console.Write("Which student (mail) =>");
+                                                Console.Write("Which student (mail) => ");
                                                 string studentMailDelete = Console.ReadLine();
-                                                Console.Write("Which course =>");
+                                                Console.Write("Which course => ");
                                                 string courseNameDelete = Console.ReadLine();
                                                 foreach (Student student in ListStudents)
                                                 {
@@ -298,16 +300,19 @@ namespace Final_Project_POO
                                                 break;
                                         }
                                     }
-
-
                                     break;
                                 case "3":
                                     Console.Clear();
-                                    Console.WriteLine("Current password");
+                                    Console.Write("Current password => ");
                                     if (Console.ReadLine() == ListFaculties[index].UserPassword)
                                     {
-                                        Console.WriteLine("New password");
+                                        Console.Write("New password => ");
                                         ListFaculties[index].UserPassword = Console.ReadLine();
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Wrong password");
+                                        Console.ReadKey();
                                     }
                                     break;
                                 case "4":
@@ -327,11 +332,13 @@ namespace Final_Project_POO
                         #endregion
                         case "ADMIN":
                             #region ADMIN
-                            index = 0;
-                            foreach (User admin in ListAdmins)
+                            foreach (Admin admin in ListAdmins)
                             {
-                                if (admin.Username == username) break;
-                                index++;
+                                if (admin.Username == username)
+                                {
+                                    index = ListAdmins.IndexOf(admin);
+                                    break;
+                                }
                             }
                             Console.Clear();
                             Console.WriteLine("1)Manage courses");
@@ -339,6 +346,7 @@ namespace Final_Project_POO
                             Console.WriteLine("3)Add user");
                             Console.WriteLine("4)Manage Fees");
                             Console.WriteLine("5)Log out");
+                            Console.WriteLine("DO NOT FORGET TO LOG OUT TO SAVE THE DATAS");
                             choose = Console.ReadLine();
                             switch (choose)
                             {
@@ -350,8 +358,8 @@ namespace Final_Project_POO
                                         Console.Clear();
                                         Console.WriteLine("1)Create course");
                                         Console.WriteLine("2)Modify course");
-                                        //delete a course
-                                        Console.WriteLine("3)Back");
+                                        Console.WriteLine("3)Delete course");
+                                        Console.WriteLine("4)Back");
                                         choose = Console.ReadLine();
                                         switch (choose)
                                         {
@@ -368,21 +376,21 @@ namespace Final_Project_POO
                                                 break;
                                             case "2":
                                                 Console.Clear();
-                                                Console.WriteLine("Which course =>");
+                                                Console.Write("Which course => ");
                                                 string courseName = Console.ReadLine();
-                                                foreach(Faculty faculty in ListFaculties)
+                                                foreach(Faculty faculty in ListFaculties)//check wich faculty has this course
                                                 {
                                                     int indexCourse = 0;
                                                     foreach (Course course in faculty.coursesTaught)
                                                     {
                                                         if (courseName == course.CourseName)
                                                         {
-                                                            Course changeFaculty = faculty.ModifyCourse(indexCourse);
-                                                            if (changeFaculty != null)
+                                                            Course changeFaculty = faculty.ModifyCourse(indexCourse);//modify
+                                                            if (changeFaculty != null)//if we change the faculty
                                                             {
-                                                                foreach (Faculty faculty2 in ListFaculties)
+                                                                foreach (Faculty faculty2 in ListFaculties)//we search the new faculty
                                                                 {
-                                                                    if(changeFaculty.CourseTeacher == faculty2.name)
+                                                                    if(changeFaculty.CourseTeacher == faculty2.name)//then we add and delete the course
                                                                     {
                                                                         faculty2.coursesTaught.Add(changeFaculty);
                                                                         faculty.coursesTaught.Remove(changeFaculty);
@@ -397,6 +405,22 @@ namespace Final_Project_POO
                                                 }
                                                 break;
                                             case "3":
+                                                Console.Clear();
+                                                Console.Write("Which course => ");
+                                                string courseDelete = Console.ReadLine();
+                                                foreach(Faculty faculty in ListFaculties)
+                                                {
+                                                    foreach(Course course in faculty.coursesTaught)
+                                                    {
+                                                        if (courseDelete == course.CourseName)
+                                                        {
+                                                            faculty.coursesTaught.Remove(course);
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                                break;
+                                            case "4":
                                                 ExitCourse = true;
                                                 break;
                                             default:
@@ -405,18 +429,20 @@ namespace Final_Project_POO
                                                 break;
                                         }
                                     }
-
-
                                     break;
                                 case "2":
                                     Console.Clear();
-                                    Console.WriteLine("Current password");
+                                    Console.Write("Current password => ");
                                     if (Console.ReadLine() == ListAdmins[index].UserPassword)
                                     {
-                                        Console.WriteLine("New password");
+                                        Console.Write("New password => ");
                                         ListAdmins[index].UserPassword = Console.ReadLine();
                                     }
-                                    else Console.WriteLine("Wrong password");
+                                    else
+                                    {
+                                        Console.WriteLine("Wrong password");
+                                        Console.ReadKey();
+                                    }
                                     break;
                                 case "3":
                                     bool ExitUser = false;
@@ -426,60 +452,117 @@ namespace Final_Project_POO
                                         Console.WriteLine("1)Add student");
                                         Console.WriteLine("2)Add faculty");
                                         Console.WriteLine("3)Add Admin");
-                                        //delete user
-                                        Console.WriteLine("4)Back");
+                                        Console.WriteLine("4)Delete user");
+                                        Console.WriteLine("5)Back");
                                         choose = Console.ReadLine();
                                         string newUsername;
                                         string newPassword;
                                         string newName;
                                         int newAge;
                                         int newID;
+                                        string[] datasName;
                                         switch (choose)
                                         {
                                             case "1":
                                                 Console.Clear();
-                                                Console.Write("new username (mail) =>");
-                                                newUsername = Console.ReadLine();
-                                                Console.Write("new password =>");
-                                                newPassword = Console.ReadLine();
-                                                Console.Write("new name =>");
+                                                Console.Write("First name ans last name => ");
                                                 newName = Console.ReadLine();
-                                                Console.Write("new age");
-                                                newAge = Convert.ToInt32(Console.ReadLine());
-                                                Console.Write("new ID");//ne doit pas etre le meme qu'un autre
-                                                newID = Convert.ToInt32(Console.ReadLine());
+                                                datasName = newName.Split(' ');
+                                                newUsername = datasName[0] + "." + datasName[1] + "@gmail.com";
+                                                Console.Write("Password => ");
+                                                newPassword = Console.ReadLine();
+                                                do Console.Write("Age => ");
+                                                while (!int.TryParse(Console.ReadLine(), out newAge));
+                                                do Console.Write("ID => ");
+                                                while (!int.TryParse(Console.ReadLine(),out newID));
                                                 ListStudents.Add(new Student(newUsername, newPassword, newName, newAge, "STUDENT", newID));
-                                                //le rajouter dans les note
+                                                //we add the student to the grades database
+                                                StreamReader numberGrades = new StreamReader("GRADES_DATABASE.csv");
+                                                string[] datasGrade = numberGrades.ReadLine().Split(';');
+                                                int number = datasGrade.Length - 2;
+                                                numberGrades.Close();
+                                                StreamWriter AddStudent = new StreamWriter("GRADES_DATABASE.csv", true);
+                                                AddStudent.Write("\n" + newUsername + ";" + ListStudents[ListStudents.Count - 1].classroom);
+                                                for (int i = 0; i <= number; i++) AddStudent.Write(";");
+                                                AddStudent.Close();
+
                                                 break;
                                             case "2":
                                                 Console.Clear();
-                                                Console.Write("new username (mail) =>");
-                                                newUsername = Console.ReadLine();
-                                                Console.Write("new password =>");
-                                                newPassword = Console.ReadLine();
-                                                Console.Write("new name =>");
+                                                Console.Write("First name ans last name => ");
                                                 newName = Console.ReadLine();
-                                                Console.Write("new age");
-                                                newAge = Convert.ToInt32(Console.ReadLine());
-                                                Console.Write("new ID");//ne doit pas etre le meme qu'un autre
-                                                newID = Convert.ToInt32(Console.ReadLine());
+                                                datasName = newName.Split(' ');
+                                                newUsername = datasName[0] + "." + datasName[1] + "@gmail.com";
+                                                Console.Write("Password => ");
+                                                newPassword = Console.ReadLine();
+                                                do Console.Write("Age => ");
+                                                while (!int.TryParse(Console.ReadLine(), out newAge));
+                                                do Console.Write("ID => ");
+                                                while (!int.TryParse(Console.ReadLine(), out newID));
                                                 ListStudents.Add(new Student(newUsername, newPassword, newName, newAge, "FACULTY", newID));
                                                 break;
                                             case "3":
                                                 Console.Clear();
-                                                Console.Write("new username (mail) =>");
-                                                newUsername = Console.ReadLine();
-                                                Console.Write("new password =>");
-                                                newPassword = Console.ReadLine();
-                                                Console.Write("new name =>");
+                                                Console.Write("First name ans last name => ");
                                                 newName = Console.ReadLine();
-                                                Console.Write("new age");
-                                                newAge = Convert.ToInt32(Console.ReadLine());
-                                                Console.Write("new ID");//ne doit pas etre le meme qu'un autre
-                                                newID = Convert.ToInt32(Console.ReadLine());
+                                                datasName = newName.Split(' ');
+                                                newUsername = datasName[0] + "." + datasName[1] + "@gmail.com";
+                                                Console.Write("Password => ");
+                                                newPassword = Console.ReadLine();
+                                                do Console.Write("Age => ");
+                                                while (!int.TryParse(Console.ReadLine(), out newAge));
+                                                do Console.Write("ID => ");
+                                                while (!int.TryParse(Console.ReadLine(), out newID));
                                                 ListStudents.Add(new Student(newUsername, newPassword, newName, newAge, "ADMIN", newID));
                                                 break;
                                             case "4":
+                                                Console.Clear();
+                                                Console.Write("user deleted (mail)=> ");
+                                                string userDelete = Console.ReadLine();
+                                                foreach(User user in userList)
+                                                {
+                                                    Console.WriteLine("hey");
+                                                    if (userDelete == user.Username)
+                                                    {
+                                                        switch (user.status)
+                                                        {
+                                                            case "STUDENT":
+                                                                foreach (Student student in ListStudents)
+                                                                {
+                                                                    if (userDelete == student.Username)
+                                                                    {
+                                                                        ListStudents.Remove(student);
+                                                                        break;
+                                                                    }
+                                                                }
+                                                                break;
+                                                            case "FACULTY":
+                                                                foreach (Faculty faculty in ListFaculties)
+                                                                {
+                                                                    if (userDelete == faculty.Username)
+                                                                    {
+                                                                        ListFaculties.Remove(faculty);
+                                                                        break;
+                                                                    }
+                                                                }
+                                                                break;
+                                                            case "ADMIN":
+                                                                foreach (Admin admin in ListAdmins)
+                                                                {
+                                                                    if (userDelete == admin.Username)
+                                                                    {
+                                                                        ListAdmins.Remove(admin);
+                                                                        break;
+                                                                    }
+                                                                }
+                                                                break;
+                                                            default:
+                                                                break;
+                                                        }
+                                                    }
+                                                }
+                                                break;
+                                            case "5":
                                                 ExitUser = true;
                                                 break;
                                             default:
@@ -503,15 +586,22 @@ namespace Final_Project_POO
                                         {
                                             case "1":
                                                 Console.Clear();
-                                                Console.Write("Which student (mail)=>");
+                                                Console.Write("Which student (mail)=> ");
                                                 studentName = Console.ReadLine();
                                                 foreach(Student student in ListStudents)
                                                 {
                                                     if (studentName == student.Username)
                                                     {
-                                                        Console.Write("New limit date (year,month,day)=>");//bien vérifier que l'entrer respect
-                                                        string[] datasLimitDate = Console.ReadLine().Split(',');
-                                                        student.feesDetails.LimitDate = new DateTime(Convert.ToInt32(datasLimitDate[0]), Convert.ToInt32(datasLimitDate[1]), Convert.ToInt32(datasLimitDate[2]));
+                                                        int newYear;
+                                                        do Console.Write("Limit year => ");
+                                                        while (!int.TryParse(Console.ReadLine(), out newYear));
+                                                        int newMonth;
+                                                        do Console.Write("Limit month => ");
+                                                        while (!int.TryParse(Console.ReadLine(), out newMonth));
+                                                        int newDay;
+                                                        do Console.Write("Limit day => ");
+                                                        while (!int.TryParse(Console.ReadLine(), out newDay));
+                                                        student.feesDetails.LimitDate = new DateTime(newYear, newMonth, newDay);
                                                         break;
                                                     }
                                                     else if (student.Equals(ListStudents.Last())) Console.WriteLine("This student doesn't exist");
@@ -520,14 +610,15 @@ namespace Final_Project_POO
                                                 break;
                                             case "2":
                                                 Console.Clear();
-                                                Console.Write("Which student (mail)=>");
+                                                Console.Write("Which student (mail) => ");
                                                 studentName = Console.ReadLine();
                                                 foreach (Student student in ListStudents)
                                                 {
                                                     if (studentName == student.Username)
                                                     {
-                                                        Console.Write("new payment due =>");
-                                                        int newPaymentDue=Convert.ToInt32(Console.ReadLine());
+                                                        int newPaymentDue;
+                                                        do Console.Write("new payment due => ");
+                                                        while (!int.TryParse(Console.ReadLine(), out newPaymentDue));
                                                         student.feesDetails.PaymentDue=newPaymentDue;
                                                         break;
                                                     }
@@ -554,19 +645,17 @@ namespace Final_Project_POO
                                     break;
                             }
                             break;
-                            #endregion
+                        #endregion
                     }
                 }
 
                 #region REWRITE DATABASE
-
                 string rewriteStudent = "USERNAME;YEAR;CLASSROOM;ACCOUNTBALANCE;PAYMENTSTATUS;PAYMENTDUE;MISSEDCLASSES\n";
                 string rewriteUser = "USERNAME;PASSWORD;NAME;AGE;STATUS;ID\n";
                 string rewriteCourse = "COURSENAME;CONTENT;COURSETEACHER;COURSEDAY;STARTINGHOUR;ENDINGHOUR;CLASSROOM\n";
-                //string rewriteGrade = "";
                 foreach(Student student in ListStudents)
                 {
-                    rewriteStudent = rewriteStudent + student.Username + ";" + student.year + ";" + student.classroom + ";" + student.feesDetails.AccountBalance + ";" + student.feesDetails.PaymentStatus + ";" + student.feesDetails.PaymentDue;
+                    rewriteStudent = rewriteStudent + student.Username + ";" + student.year + ";" + student.classroom + ";" + student.feesDetails.AccountBalance + ";" + student.feesDetails.PaymentStatus + ";" + student.feesDetails.PaymentDue + ";";
                     if (student.studentMissing != null)
                     {
                         foreach (string course in student.studentMissing)
@@ -576,7 +665,7 @@ namespace Final_Project_POO
                     }
                     else rewriteStudent = rewriteStudent + ";";
                     rewriteUser = rewriteUser + student.Username + ";" + student.UserPassword + ";" + student.name + ";" + student.age + ";" + student.status + ";" + student.ID + "\n";
-                    if (!student.Equals(ListStudents.Last())) rewriteStudent = rewriteStudent + "\n";
+                    if (!student.Equals(ListStudents.Last())) rewriteStudent = rewriteStudent + "\n";//if we finish a line, we go to the next line (except the last line)
                 }
                 foreach(Faculty faculty in ListFaculties)
                 {
@@ -585,9 +674,10 @@ namespace Final_Project_POO
                     {
                         foreach (Course course in faculty.coursesTaught)
                         {
-                            rewriteCourse = rewriteCourse + course.CourseName + ";" + course.Content + ";" + course.CourseTeacher + ";" + course.CourseDay + ";" + course.StartingHour + ";" + course.EndingHour + ";" + course.classroom + "\n";
+                            rewriteCourse = rewriteCourse + course.CourseName + ";" + course.Content + ";" + course.CourseTeacher + ";" + course.CourseDay + ";" + course.StartingHour + ";" + course.EndingHour + ";" + course.classroom;
                             if (!course.Equals(faculty.coursesTaught.Last())) rewriteCourse = rewriteCourse + "\n";
                         }
+                        if (!faculty.Equals(ListFaculties.Last())) rewriteCourse = rewriteCourse + "\n";
                     }
                 }
                 foreach(Admin admin in ListAdmins)
@@ -605,8 +695,6 @@ namespace Final_Project_POO
                 rewriteData.Write(rewriteCourse);
                 rewriteData.Close();
                 #endregion
-
-
             }
 
             Console.ReadKey();

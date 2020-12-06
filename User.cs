@@ -25,7 +25,7 @@ namespace Final_Project_POO
             this.ID = ID;
         }
 
-        public List<User> Users;
+        
 
         static public bool Login(List<User> UsersList, string username)
         {
@@ -33,11 +33,11 @@ namespace Final_Project_POO
             bool login = false;
             foreach (User user in UsersList)
             {
-                if (user.Username == username)
+                if (user.Username == username)//we search the user
                 {
                     Console.Write("Enter password => ");
                     string password = Console.ReadLine();
-                    if (password == user.UserPassword) { login = true; break; }
+                    if (password == user.UserPassword) { login = true; break;  }//we check if the password is correct
                 }
             }
             return login;

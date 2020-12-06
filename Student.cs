@@ -18,6 +18,7 @@ namespace Final_Project_POO
         public Student(string Username, string UserPassword, string name, int age, string status, int ID)
             : base(Username, UserPassword, name, age, status, ID)
         {
+            studentMissing = null;
             StreamReader LectStudents = new StreamReader("STUDENT_DATABASE.csv");
             LectStudents.ReadLine();
             while (LectStudents.Peek() > 0)
@@ -31,14 +32,17 @@ namespace Final_Project_POO
                     studentMissing = new List<string>(datas[6].Split(','));
                     break;
                 }
-                if (LectStudents.Peek() <= 0)
+                if (LectStudents.Peek() <= 0)//if it's a student that is not is the database (so that was create by a admin)
                 {
-                    Console.Write("new year =>");
-                    year = Convert.ToInt32(Console.ReadLine());
-                    Console.Write("new classroom =>");
+                    int newYear;
+                    do Console.Write("new year => ");
+                    while (!int.TryParse(Console.ReadLine(), out newYear));
+                    year = newYear;
+                    Console.Write("new classroom => ");
                     classroom = Console.ReadLine();
-                    Console.WriteLine("new account balance =>");
-                    double accountBalance = Convert.ToDouble(Console.ReadLine());
+                    double accountBalance;
+                    do Console.Write("new account balance => ");
+                    while (!double.TryParse(Console.ReadLine(), out accountBalance));
                     bool paymentStatus = false;
                     double paymentDue = 8000;
                     feesDetails = new Fees(accountBalance, paymentStatus, paymentDue);
@@ -163,7 +167,7 @@ namespace Final_Project_POO
         {
             return (string.Compare(end1, start2) <= 0);
         }
-        public void CheckGrades()
+        public void CheckGrades()//we found the student is the database of grade and then show his grades
         {
             StreamReader LectGrade = new StreamReader("GRADES_DATABASE.csv");
             string[] nameGrade = LectGrade.ReadLine().Split(';');
@@ -174,7 +178,7 @@ namespace Final_Project_POO
                 {
                     for (int i = 1; i < datas.Length; i++)
                     {
-                        Console.WriteLine(nameGrade[i] + " " + datas[i]);
+                        if (datas[i] != "") Console.WriteLine(nameGrade[i] + " " + datas[i]);
                     }
                 }
             }

@@ -9,19 +9,18 @@ namespace Final_Project_POO
 {
     class Faculty : User
     {
-        public string adress { get; set; }
         public List<Course> coursesTaught { get; set; }
 
         public Faculty(string Username, string UserPassword, string name, int age, string status, int ID)
             : base(Username, UserPassword, name, age, status, ID)
         {
-
+            coursesTaught = new List<Course>();
             StreamReader LectCourse = new StreamReader("COURSE_DATABASE.csv");
             LectCourse.ReadLine();
             while (LectCourse.Peek() > 0)
             {
                 string[] datas = LectCourse.ReadLine().Split(';');
-                if (Username == datas[2])
+                if (name == datas[2])
                 {
                     coursesTaught.Add(new Course(datas[0], datas[1], datas[2], datas[3], datas[4], datas[5], datas[6]));
                 }
@@ -30,21 +29,14 @@ namespace Final_Project_POO
 
         }
 
-        public void Show_Grade(string GradeName)
+        public void ShowGrade(string GradeName)
         {
             StreamReader LectGrade = new StreamReader("GRADES_DATABASE.csv");
-
-
-            char sep = ';';
-            string line = "";
             string[] datas;
-
-
-
             int placeNote = 0;
             bool verif = false;
             datas = LectGrade.ReadLine().Split(';');
-            for (int i = 0; i < datas.Length; i++)
+            for (int i = 0; i < datas.Length; i++)//we search the column of the grade
             {
                 if (datas[i] == GradeName)
                 {
@@ -53,19 +45,18 @@ namespace Final_Project_POO
                     break;
                 }
             }
-            if (verif)
+            if (verif)//if the grade is found we show the grades
             {
                 while (LectGrade.Peek() > 0)
                 {
-                    line = LectGrade.ReadLine();
-                    datas = line.Split(sep);
+                    datas = LectGrade.ReadLine().Split(';');
                     Console.WriteLine(datas[0] + "   " + datas[placeNote]);
                 }
             }
             else Console.WriteLine("This Grade doesn't exist");
             LectGrade.Close();
         }
-        public void Change_Grade(string student, string gradeName, string grade)
+        public void ChangeGrade(string student, string gradeName, string grade)
         {
             string finalText = null;
             StreamReader LectureGrade = new StreamReader("GRADES_DATABASE.csv");
@@ -73,7 +64,7 @@ namespace Final_Project_POO
             string[] datas2;
             int nbline = 0;
 
-            while (LectureGrade.Peek() > 0)
+            while (LectureGrade.Peek() > 0)//we check the number of line
             {
                 line = LectureGrade.ReadLine();
                 nbline++;
@@ -82,7 +73,7 @@ namespace Final_Project_POO
             LectureGrade = new StreamReader("GRADES_DATABASE.csv");
             string[][] datas = new string[nbline][];
             int i = 0;
-            while (LectureGrade.Peek() > 0)
+            while (LectureGrade.Peek() > 0)//we write the database in chart
             {
                 line = LectureGrade.ReadLine();
                 datas2 = line.Split(';');
@@ -90,7 +81,7 @@ namespace Final_Project_POO
                 i++;
             }
             int column = 0;
-            for (int j = 0; j < datas[0].Length; j++)
+            for (int j = 0; j < datas[0].Length; j++)//then we search the column of the grade
             {
                 if (datas[0][j] == gradeName)
                 {
@@ -99,7 +90,7 @@ namespace Final_Project_POO
                 }
             }
             int lineGrade = 0;
-            for (int k = 0; k < datas.Length; k++)
+            for (int k = 0; k < datas.Length; k++)//and the line of the student
             {
                 if (datas[k][0] == student)
                 {
@@ -108,24 +99,24 @@ namespace Final_Project_POO
                 }
             }
             LectureGrade.Close();
-            if (lineGrade != 0 && column != 0)
+            if (lineGrade != 0 && column != 0)//if found we change the grade
             {
                 datas[lineGrade][column] = grade;
             }
             else Console.WriteLine("The student or the name of the grade doesn't exist");
-            for (int j = 0; j < datas.Length; j++)
+            for (int j = 0; j < datas.Length; j++)//we rewrite all the chart in the database
             {
                 for (int k = 0; k < datas[j].Length; k++)
                 {
                     finalText = finalText + datas[j][k] + ";";
                 }
-                finalText = finalText + "\r\n";
+                if (j != datas.Length - 1) finalText = finalText + "\r\n";
             }
             StreamWriter WriteGrades = new StreamWriter("GRADES_DATABASE.csv");
             WriteGrades.Write(finalText);
             WriteGrades.Close();
         }
-        public void Create_Grade(string gradeName)
+        public void CreateGrade(string gradeName, string classroom)
         {
             string finalText = null;
             StreamReader LectureGrade = new StreamReader("GRADES_DATABASE.csv");
@@ -133,7 +124,7 @@ namespace Final_Project_POO
             string[] datas2;
             int nbline = 0;
 
-            while (LectureGrade.Peek() > 0)
+            while (LectureGrade.Peek() > 0)//we check the number of line
             {
                 line = LectureGrade.ReadLine();
                 nbline++;
@@ -142,17 +133,20 @@ namespace Final_Project_POO
             LectureGrade = new StreamReader("GRADES_DATABASE.csv");
             string[][] datas = new string[nbline][];
             int i = 0;
-            while (LectureGrade.Peek() > 0)
+            while (LectureGrade.Peek() > 0)//we write the database in a chart but we add a column for the new grade
             {
                 line = LectureGrade.ReadLine();
                 datas2 = line.Split(';');
                 datas[i] = new string[datas2.Length + 1];
                 if (i == 0) datas[0][datas[0].Length - 1] = gradeName;
-                else
+                else if (classroom == datas2[1])
                 {
-                    Console.Write("What is the grade for " + datas2[0] + "=>");
-                    datas[i][datas[i].Length - 1] = Console.ReadLine();
+                    int grade;
+                    do Console.Write("What is the grade for " + datas2[0] + "=>");//in the new column we add the grade
+                    while (!int.TryParse(Console.ReadLine(), out grade));
+                    datas[i][datas[i].Length - 1] = Convert.ToString(grade);
                 }
+                else datas[i][datas[i].Length - 1] = "";
                 for (int j = 0; j < datas2.Length; j++)
                 {
                     datas[i][j] = datas2[j];
@@ -160,16 +154,59 @@ namespace Final_Project_POO
                 i++;
             }
             LectureGrade.Close();
-            for (int j = 0; j < datas.Length; j++)
+            for (int j = 0; j < datas.Length; j++)//then we rewrite the chart in the database
             {
                 for (int k = 0; k < datas[j].Length; k++)
                 {
                     finalText = finalText + datas[j][k] + ";";
                 }
-                finalText = finalText + "\r\n";
+                if (j != datas.Length - 1) finalText = finalText + "\r\n";
             }
             StreamWriter WriteGrades = new StreamWriter("GRADES_DATABASE.csv");
             WriteGrades.Write(finalText);
+            WriteGrades.Close();
+        }
+        public void DeleteGrade(string gradeName)
+        {
+            int nbline = 0;
+            StreamReader LectGrade = new StreamReader("GRADES_DATABASE.csv");
+            while (LectGrade.Peek() > 0)//we check the number of line
+            {
+                LectGrade.ReadLine();
+                nbline++;
+            }
+            LectGrade.Close();
+            LectGrade = new StreamReader("GRADES_DATABASE.csv");
+            string[][] saveGrades=new string[nbline][];
+            int i = 0;
+            while (LectGrade.Peek() > 0)//we write the database in a chart
+            {
+                saveGrades[i] = LectGrade.ReadLine().Split(';');
+                i++;
+            }
+            LectGrade.Close();
+            int column=-1;
+            for(int j = 0; j < saveGrades[0].Length; j++)
+            {
+                if (saveGrades[0][j] == gradeName)//we search the column of the grade that we want to delete
+                {
+                    column = j;
+                    break;
+                }
+            }
+            if (column == -1) Console.WriteLine("The grade doesn't exist");
+            Console.ReadKey();
+            string rewriteGrade = "";
+            for(int j = 0; j < saveGrades.Length; j++)//then we rewrite the database but without the grade
+            {
+                for (int k = 0; k < saveGrades[j].Length; k++)
+                {
+                    if (k != column) rewriteGrade = rewriteGrade + saveGrades[j][k] + ";";
+                }
+                if (j != saveGrades.Length - 1) rewriteGrade = rewriteGrade + "\n";
+            }
+            StreamWriter WriteGrades = new StreamWriter("GRADES_DATABASE.csv");
+            WriteGrades.Write(rewriteGrade);
             WriteGrades.Close();
         }
         public void DisplayTimetable()
@@ -298,33 +335,50 @@ namespace Final_Project_POO
                 switch (Console.ReadLine())
                 {
                     case "1":
-                        Console.Write("New course name =>");
+                        Console.Write("New course name => ");
                         coursesTaught[index].CourseName = Console.ReadLine();
                         break;
                     case "2":
-                        Console.Write("New content =>");
+                        Console.Write("New content => ");
                         coursesTaught[index].Content = Console.ReadLine();
                         break;
                     case "3":
-                        Console.Write("New faculty =>");
+                        Console.Write("New faculty => ");
                         coursesTaught[index].CourseTeacher = Console.ReadLine();
                         changeFaculty = coursesTaught[index];
                         break;
                     case "4":
-                        Console.Write("New day =>");
-                        coursesTaught[index].CourseDay = Console.ReadLine();//verifier
+                        Console.Write("New day => ");
+                        string newDay = Console.ReadLine();
+                        if (newDay != "monday" && newDay != "tuesday" && newDay != "wednesday" && newDay != "thursday" && newDay != "friday") coursesTaught[index].CourseDay = newDay;
+                        else
+                        {
+                            Console.WriteLine("Wrong Input");
+                            Console.ReadKey();
+                        }
                         break;
                     case "5":
-                        Console.Write("New starting hour =>");
-                        coursesTaught[index].StartingHour = Console.ReadLine();//verifier
+                        Console.Write("New starting hour (HH:MM) => ");
+                        string newStartingHour = Console.ReadLine();
+                        if (newStartingHour.Length == 4)
+                        {
+                            newStartingHour = "0" + newStartingHour;
+                        }
+                        coursesTaught[index].StartingHour = newStartingHour;
                         break;
                     case "6":
-                        Console.Write("New ending hour =>");
-                        coursesTaught[index].EndingHour = Console.ReadLine();//verifier
+                        Console.Write("New ending hour (HH:MM) => ");
+                        string newEndingHour = Console.ReadLine();
+                        
+                        if (newEndingHour.Length == 4)
+                        {
+                            newEndingHour = "0" + newEndingHour;
+                        }
+                        coursesTaught[index].EndingHour = newEndingHour;
                         break;
                     case "7":
-                        Console.Write("New classroom =>");
-                        coursesTaught[index].classroom = Console.ReadLine();//verifer
+                        Console.Write("New classroom => ");
+                        coursesTaught[index].classroom = Console.ReadLine();
                         break;
                     case "8":
                         ExitCourse = true;

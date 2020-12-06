@@ -11,48 +11,6 @@ namespace Final_Project_POO
         public Admin(string Username, string UserPassword, string name, int age, string status, int ID)
             : base(Username, UserPassword, name, age, status, ID) { }
 
-        public void Modify_Courses(Course course)
-        {
-            int a = 0;
-            while (a == 0)
-            {
-                Console.WriteLine("What change would you want to do? \r\n 1)Name of the course \r\n 2)The Faculty \r\n 3)The content \r\n 4)The day \r\n 5)The starting hour \r\n 6)The ending hour \r\n 7)Back");
-                int choose = Convert.ToInt32(Console.ReadLine());
-                Console.Clear();
-                switch (choose)
-                {
-                    case 1:
-                        Console.Write("Choose the new name =>");
-                        course.CourseName = Console.ReadLine();
-                        break;
-                    case 2:
-                        break;
-                    case 3:
-                        Console.Write("Choose the new content =>");
-                        course.Content = name = Console.ReadLine();
-                        break;
-                    case 4:
-                        Console.Write("Choose the new day =>");
-                        course.CourseDay = name = Console.ReadLine();
-                        break;
-                    case 5:
-                        Console.Write("Choose the new starting hour =>");
-                        course.StartingHour = name = Console.ReadLine();
-                        break;
-                    case 6:
-                        Console.Write("Choose the new ending hour =>");
-                        course.EndingHour = name = Console.ReadLine();
-                        break;
-                    case 7:
-                        a = 1;
-                        break;
-                    default:
-                        Console.WriteLine("Wrong input");
-                        break;
-                }
-                Console.Clear();
-            }
-        }
         public Course Create_Course()
         {
             Console.Write("choose the name of the course =>");
